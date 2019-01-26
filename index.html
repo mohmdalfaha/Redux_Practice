@@ -88,11 +88,21 @@
           .catch(() => {
           dispatch(addTodoAction(todo))
           alert('An error occurred')
-
           })
       }
     }
 
+    function handleToggle(id){
+      return (dispatch) => {
+          dispatch(toggleTodoAction(id))
+
+          return API.saveTodoToggle (id)
+            .catch(() => {
+              dispatch(toggleTodoAction(id))
+              alert('An error occurred')
+            })
+      }
+    }
     function handleAddGoal (name, cb) {
       return (dispatch) =>{
 
@@ -240,13 +250,7 @@
              }
 
       toggleItem = (id) => {
-          this.props.store.dispatch(toggleTodoAction(id))
-
-          return API.saveTodoToggle (id)
-            .catch(() => {
-              this.props.store.dispatch(toggleTodoAction(id))
-              alert('An error occurred')
-            })
+          this.props.store.dispatch(handleToggle(id))
         }
 
 
