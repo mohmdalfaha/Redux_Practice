@@ -32,6 +32,17 @@
       }
     }
 
+    function handleInitialData(){
+      return (dispatch) => {
+                Promise.all([
+          API.fetchTodos(),
+          API.fetchGoals()
+          ]).then(([todos,goals]) =>{
+            dispatch(recieveDataAction(todos,goals))
+        })
+      }
+    }
+
     function removeTodoAction (id) {
       return {
         type: REMOVE_TODO,
@@ -313,14 +324,9 @@
       componentDidMount() {
         const { store } = this.props
 
-        store.subscribe(() => this.forceUpdate())
+        store.dispatch(handleInitialData())
 
-        Promise.all([
-          API.fetchTodos(),
-          API.fetchGoals()
-          ]).then(([todos,goals]) =>{
-            store.dispatch(recieveDataAction(todos,goals))
-        })
+        store.subscribe(() => this.forceUpdate())
         }
       render() {
         const { store } = this.props
